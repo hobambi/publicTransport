@@ -1,8 +1,8 @@
 public class Main {
     public static void main(String[] args) {
 
-        Bus bus1 = new Bus(1);
-        Bus bus2 = new Bus(2);
+        PublicTransport bus1 = new Bus(1);
+        PublicTransport bus2 = new Bus(2);
 
         bus1.showStatus();
         bus1.chageVelocity(30);
@@ -16,6 +16,19 @@ public class Main {
         bus1.fillFuel(-45);
         bus1.chageVelocity(50);
         bus1.showStatus();
+        System.out.println("-------bus>>>>>>>>taxi-----------");
+
+        PublicTransport taxi1 = new Taxi(1);
+        PublicTransport taxi2 = new Taxi(2);
+        taxi1.showStatus();
+        taxi1.onBoard(2);
+        taxi1.fillFuel(-50);
+        taxi1.offBoard(2);
+        taxi1.onBoard(5);
+        taxi1.onBoard(3);
+        taxi1.fillFuel(-40);
+        taxi1.offBoard(3);
+        taxi1.showStatus();
 
 
     }

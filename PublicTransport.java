@@ -8,23 +8,24 @@ public abstract class PublicTransport {
     int velocity = 0; // 현재 속도
     int maxPassenger; // 최대 승객 수
     int passenger = 0; // 현재 승객 수
-    boolean isDrive; // 상태 (운행중, 차고지행)
+    boolean status; // 상태 (true = 운행중)
     int fare; // 기본 요금
     int money = 0;
 
-    void setDefault(int id) { //기본 세팅
-        if (idContains.contains(id)) {
+    // 기본 상태 세팅
+    void setDefault(int id) {
+        if (this.idContains.contains(id)) {
             System.out.println("이미 있는 번호 입니다. 번호를 다시 확인하세요.");
         } else {
             this.id = id;
-            idContains.add(id);
+            this.idContains.add(id);
             fuel = 100;
             velocity = 0;
-            isDrive = true;
-            System.out.println(id + "번 버스 시작합니다.");
+            status = true;
         }
     }
 
+    // 속도 바꾸기
     void chageVelocity(int changeVelocity) {
         if (fuel < 10) {
             System.out.println("연료부족! 주유량을 확인해 주세요!");
@@ -43,64 +44,24 @@ public abstract class PublicTransport {
         }
     }
 
-    void showStatus(){
-        System.out.println("----현재 상태----");
-        System.out.println("현재 탑승객 : "+ passenger +"명");
-        System.out.println("잔여 승객수 : " + (maxPassenger-passenger)+"명");
-        System.out.println("현재 주유량 : " + fuel);
-        System.out.println("현재 총 요금 : " + money + "원");
-        System.out.println("----------------");
-    }
+    // 현재 상태 보여주기
+    abstract void showStatus();
 
-    void changeStatus() {
-        isDrive = !isDrive;
-        if (isDrive) {
-            if (fuel < 10) {
-                System.out.println("연료부족! 주유량을 확인해 주세요.");
-                isDrive = false;
-            } else {
-                fuel -= 10;
-                System.out.println("차량 상태가 [운행중]으로 바뀝니다.");
-            }
-        } else {
-            System.out.println("차량 상태가 [차고지행]으로 바뀝니다.");
-        }
-    }
+    // 상태 바꾸기 (버스와 택시가 달라 추상메서드)
+    abstract void changeStatus();
 
-    void onBoard(int newPeople) {
-        if (isDrive) {
-            for (int i = 0; i < newPeople; i++) {
-                if (passenger + 1 > maxPassenger) {
-                    System.out.println("정원 초과입니다. 더이상 탈 수 없습니다.");
-                    break;
-                } else {
-                    passenger += 1;
-                    money += fare;
-                    fuel -= 1;
-                }
-            }
-            System.out.println("탑승 승객 수는 " + passenger + "명 입니다.");
-            System.out.println("잔여 승객 수는 " + (maxPassenger - passenger) + "명 입니다.");
+    // 승객 탑승
+    abstract void onBoard(int newPeople);
 
-        } else {
-            System.out.println("차량이 운행중이 아닙니다. 승객이 탈 수 없습니다.");
-        }
-    }
+    // 승객 내리기
+    abstract void offBoard(int bye);
 
-    void offBoard(int bye){
-        if(bye>passenger){
-            System.out.println("오류! 탑승객보다 내리는 인원이 큽니다.");
-        }else {
-            System.out.println("안녕히가세요!");
-            passenger -= bye;
-            System.out.println("탑승 승객 수는 " + passenger + "명 입니다.");
-        }
-    }
-
+    // 현재 주유량 보여주기
     void showFuel() {
         System.out.println("현재 주유량은 " + fuel + "입니다.");
     }
 
+    // 주유하기 or 소비하기
     void fillFuel(int fill) {
         if (fill + fuel > maxFuel) {
             System.out.println("최대 주유량을 초과하였습니다.");
